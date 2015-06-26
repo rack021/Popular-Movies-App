@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -42,8 +43,10 @@ public class PopularMoviesAdapter extends BaseAdapter {
 
     class ViewHolder {
         ImageView thumb;
+        TextView movieName;
         public ViewHolder(View v){
             thumb = (ImageView)v.findViewById(R.id.poster);
+            movieName = (TextView) v.findViewById(R.id.movie_name);
         }
     }
 
@@ -60,6 +63,7 @@ public class PopularMoviesAdapter extends BaseAdapter {
             holder = (ViewHolder)row.getTag();
         }
         Picasso.with(mContext).load("http://image.tmdb.org/t/p/w185/"+ mpopularMovieList.get(position).poster_path).into(holder.thumb);
+        holder.movieName.setText(mpopularMovieList.get(position).title);
         return row;
     }
 }
