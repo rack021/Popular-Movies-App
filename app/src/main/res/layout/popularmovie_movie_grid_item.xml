@@ -8,7 +8,7 @@
         android:id="@+id/poster"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/a"
+        android:src="@drawable/poster_placeholder"
         android:adjustViewBounds="true" />
 
         <TextView
