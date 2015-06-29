@@ -1,15 +1,16 @@
 package movie.popular.rac.popularmovie.fragments;
 
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.BaseAdapter;
+import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -18,8 +19,6 @@ import com.google.gson.reflect.TypeToken;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
-
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -64,6 +63,15 @@ public class PopularMoviesFragment extends Fragment {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
                 new FetchPopularMovieTask().execute(ApiConstants.SORT_POPULARITY, String.valueOf(page));
+            }
+        });
+        popularMoviesGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, new MovieDetailFragment(), "ds")
+                        .addToBackStack(null)
+                        .commit();
             }
         });
         return popularMovieLayout;
