@@ -6,8 +6,12 @@ import android.transition.Explode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
 
 import movie.popular.rac.popularmovie.R;
+import movie.popular.rac.popularmovie.models.PopularMovieModel;
 
 /**
  * Created by User on 6/29/2015.
@@ -22,6 +26,13 @@ public class MovieDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View movieDetailLayout = inflater.inflate(R.layout.fragment_moviedetailview, container, false);
+        Bundle bundle = getArguments();
+        PopularMovieModel division= (PopularMovieModel) bundle.getSerializable("me");
+        ImageView image = (ImageView) movieDetailLayout.findViewById(R.id.bigposter);
+        Picasso.with(getActivity().getApplicationContext()).load("http://image.tmdb.org/t/p/w185/"+ division.poster_path)
+                .placeholder(R.drawable.poster_placeholder)
+                .error(R.drawable.poster_placeholder)
+                .into(image);
         return movieDetailLayout;
     }
 }

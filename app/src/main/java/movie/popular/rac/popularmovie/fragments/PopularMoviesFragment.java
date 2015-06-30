@@ -1,16 +1,23 @@
 package movie.popular.rac.popularmovie.fragments;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.transition.AutoTransition;
+import android.transition.ChangeTransform;
+import android.transition.Explode;
+import android.transition.Fade;
 import android.transition.TransitionInflater;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -66,11 +73,25 @@ public class PopularMoviesFragment extends Fragment {
             }
         });
         popularMoviesGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @SuppressLint("NewApi")
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                setExitTransition(new Fade());
+                TextView image = (TextView) view.findViewById(R.id.movie_name);
+                Log.d("movie name", image.getText().toString());
+                View view1 = view.findViewById(R.id.poster);
+                view1.setTransitionName("view.findViewById(R.id.poster)");
+                MovieDetailFragment movieDetailFragment =  new MovieDetailFragment();
+
+                Bundle bundles = new Bundle();
+                bundles.putSerializable("me", popularMovieList.get(position));
+                movieDetailFragment.setArguments(bundles);
+                movieDetailFragment.setSharedElementEnterTransition(TransitionInflater.from(getActivity()).inflateTransition(android.R.transition.move));
+                movieDetailFragment.setEnterTransition(TransitionInflater.from(getActivity()).inflateTransition(android.R.transition.move));
                 getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, new MovieDetailFragment(), "ds")
-                        .addToBackStack(null)
+                        .replace(R.id.container, movieDetailFragment)
+                        .addToBackStack("transaction")
+                        .addSharedElement(view1, "picture")
                         .commit();
             }
         });

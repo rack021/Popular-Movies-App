@@ -29,4 +29,5 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.google.code.gson:gson:1.7.2'
     compile 'com.squareup.okhttp:okhttp:2.4.0'
+    compile "com.github.andkulikov:transitions-everywhere:1.4.0"
 }
