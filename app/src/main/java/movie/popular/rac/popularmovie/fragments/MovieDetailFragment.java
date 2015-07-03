@@ -2,20 +2,14 @@ package movie.popular.rac.popularmovie.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.transition.Explode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
 import com.squareup.picasso.Picasso;
-
 import movie.popular.rac.popularmovie.R;
 import movie.popular.rac.popularmovie.models.PopularMovieModel;
 
-/**
- * Created by User on 6/29/2015.
- */
 public class MovieDetailFragment extends Fragment {
 
     @Override
