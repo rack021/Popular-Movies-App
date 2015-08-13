@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
+
 import com.squareup.picasso.Picasso;
 import movie.popular.rac.popularmovie.R;
 import movie.popular.rac.popularmovie.models.PopularMovieModel;
@@ -22,11 +24,23 @@ public class MovieDetailFragment extends Fragment {
         View movieDetailLayout = inflater.inflate(R.layout.fragment_moviedetailview, container, false);
         Bundle bundle = getArguments();
         PopularMovieModel division= (PopularMovieModel) bundle.getSerializable("me");
-        ImageView image = (ImageView) movieDetailLayout.findViewById(R.id.bigposter);
-        Picasso.with(getActivity().getApplicationContext()).load("http://image.tmdb.org/t/p/w185/"+ division.poster_path)
+        ImageView banner = (ImageView) movieDetailLayout.findViewById(R.id.bigposter);
+        ImageView poster = (ImageView) movieDetailLayout.findViewById(R.id.poster);
+        TextView movie_name = (TextView) movieDetailLayout.findViewById(R.id.moviename);
+        TextView year = (TextView) movieDetailLayout.findViewById(R.id.year);
+        TextView description = (TextView) movieDetailLayout.findViewById(R.id.description);
+
+        Picasso.with(getActivity().getApplicationContext()).load(getActivity().getString(R.string.banner_base_url) + division.backdrop_path)
                 .placeholder(R.drawable.poster_placeholder)
                 .error(R.drawable.poster_placeholder)
-                .into(image);
+                .into(banner);
+        Picasso.with(getActivity().getApplicationContext()).load(getActivity().getString(R.string.porter_base_url) + division.poster_path)
+                .placeholder(R.drawable.poster_placeholder)
+                .error(R.drawable.poster_placeholder)
+                .into(poster);
+        movie_name.setText(division.original_title);
+        year.setText(division.getYear());
+        description.setText(division.overview);
         return movieDetailLayout;
     }
 }

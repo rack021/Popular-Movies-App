@@ -62,7 +62,7 @@ public class PopularMoviesAdapter extends BaseAdapter {
         }else{
             holder = (ViewHolder)row.getTag();
         }
-        Picasso.with(mContext).load("http://image.tmdb.org/t/p/w185/"+ mpopularMovieList.get(position).poster_path)
+        Picasso.with(mContext).load(mContext.getString(R.string.porter_base_url)+ mpopularMovieList.get(position).poster_path)
                 .placeholder(R.drawable.poster_placeholder)
                 .error(R.drawable.poster_placeholder)
                 .into(holder.thumb);
