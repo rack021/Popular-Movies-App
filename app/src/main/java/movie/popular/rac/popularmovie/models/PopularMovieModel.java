@@ -13,6 +13,7 @@ public class PopularMovieModel implements Serializable {
     public String original_title;
     public String release_date;
     public String overview;
+    public String vote_average;
 
     public String getYear(){
         return release_date.split("-")[0];

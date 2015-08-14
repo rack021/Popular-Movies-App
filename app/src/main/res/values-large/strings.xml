@@ -1,7 +1,4 @@
 <resources>
-    <string name='app_name'>PopularMovie</string>
-    <string name='hello_world'>Hello world!</string>
-    <string name='action_settings'>Settings</string>
     <string name='porter_base_url'>http://image.tmdb.org/t/p/w500/</string>
     <string name='banner_base_url'>http://image.tmdb.org/t/p/w500/</string>
 </resources>

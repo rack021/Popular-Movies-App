@@ -1,7 +1,8 @@
 <resources>
-    <string name='app_name'>PopularMovie</string>
-    <string name='hello_world'>Hello world!</string>
-    <string name='action_settings'>Settings</string>
+    <string name='app_name'>Popular Movie</string>
+    <string name='action_popularty'>by Popularty</string>
+    <string name='action_rating'>by Rating</string>
     <string name='porter_base_url'>http://image.tmdb.org/t/p/w342/</string>
     <string name='banner_base_url'>http://image.tmdb.org/t/p/w342/</string>
+    <string name='rating'>%s/10</string>
 </resources>

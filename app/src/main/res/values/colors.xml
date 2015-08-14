@@ -3,4 +3,5 @@
     <item name="primary" type="color">#FFF44336</item>
     <item name="primarydark" type="color">#FFD32F2F</item>
     <item name="accent" type="color">#FFF44336</item>
+    <item name="primary_font_color" type="color">#FF212121</item>
 </resources>

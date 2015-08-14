@@ -9,8 +9,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+
+import java.util.Locale;
+
 import movie.popular.rac.popularmovie.R;
 import movie.popular.rac.popularmovie.models.PopularMovieModel;
+import movie.popular.rac.popularmovie.network.ApiConstants;
 
 public class MovieDetailFragment extends Fragment {
 
@@ -23,24 +27,25 @@ public class MovieDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View movieDetailLayout = inflater.inflate(R.layout.fragment_moviedetailview, container, false);
         Bundle bundle = getArguments();
-        PopularMovieModel division= (PopularMovieModel) bundle.getSerializable("me");
+        PopularMovieModel popularMovieModel = (PopularMovieModel) bundle.getSerializable(ApiConstants.MOVIE_DELTAIL_BUNDLE);
         ImageView banner = (ImageView) movieDetailLayout.findViewById(R.id.bigposter);
         ImageView poster = (ImageView) movieDetailLayout.findViewById(R.id.poster);
         TextView movie_name = (TextView) movieDetailLayout.findViewById(R.id.moviename);
         TextView year = (TextView) movieDetailLayout.findViewById(R.id.year);
         TextView description = (TextView) movieDetailLayout.findViewById(R.id.description);
-
-        Picasso.with(getActivity().getApplicationContext()).load(getActivity().getString(R.string.banner_base_url) + division.backdrop_path)
+        TextView rating = (TextView) movieDetailLayout.findViewById(R.id.rating);
+        Picasso.with(getActivity().getApplicationContext()).load(getActivity().getString(R.string.banner_base_url) + popularMovieModel.backdrop_path)
                 .placeholder(R.drawable.poster_placeholder)
                 .error(R.drawable.poster_placeholder)
                 .into(banner);
-        Picasso.with(getActivity().getApplicationContext()).load(getActivity().getString(R.string.porter_base_url) + division.poster_path)
+        Picasso.with(getActivity().getApplicationContext()).load(getActivity().getString(R.string.porter_base_url) + popularMovieModel.poster_path)
                 .placeholder(R.drawable.poster_placeholder)
                 .error(R.drawable.poster_placeholder)
                 .into(poster);
-        movie_name.setText(division.original_title);
-        year.setText(division.getYear());
-        description.setText(division.overview);
+        movie_name.setText(popularMovieModel.original_title);
+        year.setText(popularMovieModel.getYear());
+        description.setText(popularMovieModel.overview);
+        rating.setText(String.format(Locale.ENGLISH, getActivity().getString(R.string.rating), popularMovieModel.vote_average));
         return movieDetailLayout;
     }
 }

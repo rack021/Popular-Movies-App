@@ -1,26 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="wrap_content"
-    android:background="#ffffffff"
-    android:orientation="vertical"
-    android:elevation="3dp">
+    style="@style/grid_item_layout"
+    android:elevation="@dimen/elevation">
+
     <ImageView
         android:id="@+id/poster"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/poster_placeholder"
-        android:adjustViewBounds="true" />
+        style="@style/grid_item_poster" />
 
-        <TextView
-            android:id="@+id/movie_name"
-            android:layout_margin="8dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/darker_gray"
-            android:text="Hiiiiii"
-            android:textSize="12sp"
-            android:maxLines="2"
-            android:minLines="2" />
-
-
+    <TextView
+        android:id="@+id/movie_name"
+        style="@style/grid_item_movieName" />
 </LinearLayout>

@@ -13,10 +13,120 @@
 
     </style>
 
+    <style name="verticle_activity">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
     <style name="Divider">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_height">@dimen/divider_height</item>
         <item name="android:background">?android:attr/listDivider</item>
+    </style>
+
+    <style name="default_linear_loyoutV">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="grid_item_layout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/grid_item_height</item>
+        <item name="android:background">@android:color/white</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="grid_item_poster">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/grid_movie_poster_height</item>
+        <item name="android:adjustViewBounds">true</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:src">@drawable/poster_placeholder</item>
+    </style>
+
+    <style name="grid_item_movieName">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">@dimen/grid_movie_name_margin</item>
+        <item name="android:textColor">@android:color/darker_gray</item>
+        <item name="android:textSize">@dimen/grid_movie_name_fontsize</item>
+    </style>
+
+    <style name="grid_view">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:columnWidth">94dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:horizontalSpacing">@dimen/grid_view_spacing</item>
+        <item name="android:numColumns">auto_fit</item>
+        <item name="android:stretchMode">columnWidth</item>
+        <item name="android:verticalSpacing">@dimen/grid_view_spacing</item>
+        <item name="android:paddingLeft">@dimen/grid_view_spacing</item>
+        <item name="android:paddingRight">@dimen/grid_view_spacing</item>
+        <item name="android:paddingTop">@dimen/grid_view_spacing</item>
+        <item name="android:clipToPadding">false</item>
+        <item name="android:fastScrollEnabled">false</item>
+        <item name="android:scrollbars">none</item>
+    </style>
+
+    <style name="detial_bigposter">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/banner</item>
+        <item name="android:adjustViewBounds">false</item>
+        <item name="android:cropToPadding">false</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:src">@drawable/poster_placeholder</item>
+    </style>
+
+    <style name="movie_detail">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_below">@+id/bigposter</item>
+        <item name="android:layout_marginTop">@dimen/movie_detail_holder_margin</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:padding">@dimen/padding</item>
+    </style>
+
+    <style name="detailview_poster">
+        <item name="android:layout_width">@dimen/detailview_poster_width</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:adjustViewBounds">true</item>
+        <item name="android:clipChildren">false</item>
+        <item name="android:clipToPadding">false</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:src">@drawable/poster_placeholder</item>
+    </style>
+
+    <style name="detailview_movie_detail">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/detailview_movie_detail_width</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="detailview_movie_text">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/padding</item>
+        <item name="android:textSize">@dimen/detailview_movie_detail_text_size</item>
+    </style>
+
+    <style name="detailview_movie_text_head" parent="detailview_movie_text">
+        <item name="android:layout_marginLeft">@dimen/padding</item>
+        <item name="android:textSize">@dimen/detailview_movie_detail_text_name_size</item>
+        <item name="android:color">@color/primary_font_color</item>
+    </style>
+
+    <style name="detailview_movie_description_holder" parent="default_linear_loyoutV">
+        <item name="android:paddingLeft">@dimen/padding</item>
+        <item name="android:paddingRight">@dimen/padding</item>
+    </style>
+
+    <style name="detailview_description" parent="detailview_movie_text">
+        <item name="android:layout_marginLeft">@dimen/padding</item>
+        <item name="android:padding">@dimen/grid_view_spacing</item>
     </style>
 
 </resources>
