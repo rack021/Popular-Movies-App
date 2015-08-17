@@ -4,4 +4,7 @@
     <GridView
         android:id="@+id/popularmovies_gridview"
         style="@style/grid_view" />
+    <ImageView
+        android:id="@+id/no_internet"
+        style="@style/no_internet_image"/>
 </LinearLayout>

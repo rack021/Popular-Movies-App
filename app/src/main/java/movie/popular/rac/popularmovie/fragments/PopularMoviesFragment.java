@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -48,6 +49,7 @@ public class PopularMoviesFragment extends Fragment {
     List<PopularMovieModel> popularMovieList;
     String defaultPage = "1";
     String fliter = ApiConstants.SORT_POPULARITY;
+    ImageView emptyListMessage;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,7 @@ public class PopularMoviesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View popularMovieLayout = inflater.inflate(R.layout.fragment_popularmovies, container, false);
+        emptyListMessage = (ImageView) popularMovieLayout.findViewById(R.id.no_internet);
         popularMoviesGridView = (GridView) popularMovieLayout.findViewById(R.id.popularmovies_gridview);
         popularMoviesGridView.setAdapter(popularMoviesAdapter);
         popularMoviesGridView.setOnScrollListener(new EndlessScrollListener() {
@@ -76,11 +79,9 @@ public class PopularMoviesFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 setExitTransition(new Fade());
-                TextView image = (TextView) view.findViewById(R.id.movie_name);
                 MovieDetailFragment movieDetailFragment = new MovieDetailFragment();
-
                 Bundle bundles = new Bundle();
-                bundles.putSerializable(ApiConstants.MOVIE_DELTAIL_BUNDLE, popularMovieList.get(position));
+                bundles.putParcelable(ApiConstants.MOVIE_DELTAIL_BUNDLE, popularMovieList.get(position));
                 movieDetailFragment.setArguments(bundles);
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.container, movieDetailFragment)
@@ -160,10 +161,14 @@ public class PopularMoviesFragment extends Fragment {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            JsonObject o = new JsonParser().parse(s).getAsJsonObject();
-            List<PopularMovieModel> popularMovieList_temp = gson.fromJson(o.get("results"), listOfPopularMovieModel);
-            popularMovieList.addAll(popularMovieList_temp);
-            popularMoviesAdapter.notifyDataSetChanged();
+            if(s != null){
+                JsonObject o = new JsonParser().parse(s).getAsJsonObject();
+                List<PopularMovieModel> popularMovieList_temp = gson.fromJson(o.get("results"), listOfPopularMovieModel);
+                popularMovieList.addAll(popularMovieList_temp);
+                popularMoviesAdapter.notifyDataSetChanged();
+            }else{
+                popularMoviesGridView.setEmptyView(emptyListMessage);
+            }
         }
     }
 }

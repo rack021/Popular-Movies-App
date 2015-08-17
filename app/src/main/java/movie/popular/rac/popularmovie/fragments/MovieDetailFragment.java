@@ -27,7 +27,7 @@ public class MovieDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View movieDetailLayout = inflater.inflate(R.layout.fragment_moviedetailview, container, false);
         Bundle bundle = getArguments();
-        PopularMovieModel popularMovieModel = (PopularMovieModel) bundle.getSerializable(ApiConstants.MOVIE_DELTAIL_BUNDLE);
+        PopularMovieModel popularMovieModel = (PopularMovieModel) bundle.getParcelable(ApiConstants.MOVIE_DELTAIL_BUNDLE);
         ImageView banner = (ImageView) movieDetailLayout.findViewById(R.id.bigposter);
         ImageView poster = (ImageView) movieDetailLayout.findViewById(R.id.poster);
         TextView movie_name = (TextView) movieDetailLayout.findViewById(R.id.moviename);

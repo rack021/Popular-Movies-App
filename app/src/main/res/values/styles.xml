@@ -129,4 +129,11 @@
         <item name="android:padding">@dimen/grid_view_spacing</item>
     </style>
 
+    <style name="no_internet_image">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:src">@drawable/no_internet_img</item>
+        <item name="android:background">#FFF7F7F7</item>
+    </style>
+
 </resources>
