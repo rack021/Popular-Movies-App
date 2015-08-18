@@ -5,4 +5,5 @@
     <string name='porter_base_url'>http://image.tmdb.org/t/p/w342/</string>
     <string name='banner_base_url'>http://image.tmdb.org/t/p/w342/</string>
     <string name='rating'>%s/10</string>
+    <string name="MOVIE_KEY">movie_key</string>
 </resources>

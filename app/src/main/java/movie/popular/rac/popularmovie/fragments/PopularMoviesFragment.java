@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -46,7 +45,7 @@ public class PopularMoviesFragment extends Fragment {
     Gson gson;
     PopularMoviesAdapter popularMoviesAdapter;
     Type listOfPopularMovieModel;
-    List<PopularMovieModel> popularMovieList;
+    ArrayList<PopularMovieModel> popularMovieList;
     String defaultPage = "1";
     String fliter = ApiConstants.SORT_POPULARITY;
     ImageView emptyListMessage;
@@ -54,12 +53,24 @@ public class PopularMoviesFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(savedInstanceState == null || !savedInstanceState.containsKey(getString(R.string.MOVIE_KEY))){
+            popularMovieList = new ArrayList<PopularMovieModel>();
+        }
+        else{
+            popularMovieList = savedInstanceState.getParcelableArrayList(getString(R.string.MOVIE_KEY));
+        }
         setHasOptionsMenu(true);
         gson = new Gson();
         listOfPopularMovieModel = new TypeToken<List<PopularMovieModel>>() {
         }.getType();
         popularMovieList = new ArrayList<PopularMovieModel>();
         popularMoviesAdapter = new PopularMoviesAdapter(getActivity().getApplicationContext(), popularMovieList);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(getString(R.string.MOVIE_KEY), popularMovieList);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
