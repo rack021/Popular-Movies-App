@@ -25,6 +25,11 @@ public class MovieDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -63,5 +68,11 @@ public class MovieDetailFragment extends Fragment {
         description.setText(popularMovieModel.overview);
         rating.setText(String.format(Locale.ENGLISH, getActivity().getString(R.string.rating), popularMovieModel.vote_average));
         return movieDetailLayout;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
 }
