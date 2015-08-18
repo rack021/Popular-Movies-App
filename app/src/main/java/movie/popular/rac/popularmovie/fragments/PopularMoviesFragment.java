@@ -7,6 +7,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.transition.Fade;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -120,6 +121,12 @@ public class PopularMoviesFragment extends Fragment {
                 popularMoviesGridView.setEmptyView(emptyListMessage);
             }
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
 
     @Override
