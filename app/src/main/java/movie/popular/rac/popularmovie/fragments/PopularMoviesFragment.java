@@ -1,6 +1,9 @@
 package movie.popular.rac.popularmovie.fragments;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -58,18 +61,19 @@ public class PopularMoviesFragment extends Fragment {
         }
         else{
             popularMovieList = savedInstanceState.getParcelableArrayList(getString(R.string.MOVIE_KEY));
+            fliter = savedInstanceState.getString(getString(R.string.FLITER), ApiConstants.SORT_POPULARITY);
         }
         setHasOptionsMenu(true);
         gson = new Gson();
         listOfPopularMovieModel = new TypeToken<List<PopularMovieModel>>() {
         }.getType();
-        popularMovieList = new ArrayList<PopularMovieModel>();
         popularMoviesAdapter = new PopularMoviesAdapter(getActivity().getApplicationContext(), popularMovieList);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelableArrayList(getString(R.string.MOVIE_KEY), popularMovieList);
+        outState.putString(getString(R.string.FLITER), fliter);
         super.onSaveInstanceState(outState);
     }
 
@@ -82,7 +86,9 @@ public class PopularMoviesFragment extends Fragment {
         popularMoviesGridView.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                new FetchPopularMovieTask().execute(fliter, String.valueOf(page));
+                if(isNetworkAvailable()){
+                    new FetchPopularMovieTask().execute(fliter, String.valueOf(page));
+                }
             }
         });
         popularMoviesGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -107,7 +113,12 @@ public class PopularMoviesFragment extends Fragment {
     public void onStart() {
         super.onStart();
         if (popularMovieList.isEmpty()) {
-            new FetchPopularMovieTask().execute(fliter, defaultPage);
+            if(isNetworkAvailable()){
+                new FetchPopularMovieTask().execute(fliter, defaultPage);
+            }
+            else{
+                popularMoviesGridView.setEmptyView(emptyListMessage);
+            }
         }
     }
 
@@ -135,7 +146,12 @@ public class PopularMoviesFragment extends Fragment {
                 break;
         }
         popularMovieList.clear();
-        new FetchPopularMovieTask().execute(fliter, defaultPage);
+        if(isNetworkAvailable()){
+            new FetchPopularMovieTask().execute(fliter, defaultPage);
+        }
+        else{
+            popularMoviesGridView.setEmptyView(emptyListMessage);
+        }
         popularMoviesAdapter.notifyDataSetChanged();
 
         return super.onOptionsItemSelected(item);
@@ -151,6 +167,13 @@ public class PopularMoviesFragment extends Fragment {
 
         Response response = client.newCall(request).execute();
         return response.body().string();
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     private class FetchPopularMovieTask extends AsyncTask<String, Integer, String> {
