@@ -135,5 +135,12 @@
         <item name="android:src">@drawable/no_internet_img</item>
         <item name="android:background">#FFF7F7F7</item>
     </style>
+    <style name="ratingbar" parent="Base.Widget.AppCompat.RatingBar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:src">@drawable/no_internet_img</item>
+        <item name="android:background">#FFF7F7F7</item>
+    </style>
+
 
 </resources>

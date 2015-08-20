@@ -1,5 +1,4 @@
 <resources>
     <string name='porter_base_url'>http://image.tmdb.org/t/p/w342/</string>
     <string name='banner_base_url'>http://image.tmdb.org/t/p/w342/</string>
-    <string name='youtube_thumb_url'>http://img.youtube.com/vi/%s/mqdefault.jpg</string>
 </resources>
