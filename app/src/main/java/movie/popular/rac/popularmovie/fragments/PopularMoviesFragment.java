@@ -2,6 +2,7 @@ package movie.popular.rac.popularmovie.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -18,6 +19,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -31,12 +34,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import movie.popular.rac.popularmovie.MainActivity;
 import movie.popular.rac.popularmovie.R;
 import movie.popular.rac.popularmovie.adapters.PopularMoviesAdapter;
+import movie.popular.rac.popularmovie.data.FlavoriteMoviesContract;
 import movie.popular.rac.popularmovie.listioners.EndlessScrollListener;
 import movie.popular.rac.popularmovie.models.PopularMovieModel;
 import movie.popular.rac.popularmovie.network.ApiConstants;
 import movie.popular.rac.popularmovie.network.HttpClient;
+import movie.popular.rac.popularmovie.utilities.AppUtility;
 
 /**
  * Created by User on 6/25/2015.
@@ -84,7 +90,7 @@ public class PopularMoviesFragment extends Fragment {
         popularMoviesGridView.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                if(isNetworkAvailable()){
+                if (fliter != ApiConstants.SORT_FAVORITE && AppUtility.isNetworkAvailable(getActivity())) {
                     new FetchPopularMovieTask().execute(fliter, String.valueOf(page));
                 }
             }
@@ -94,14 +100,14 @@ public class PopularMoviesFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 setExitTransition(new Fade());
+                LinearLayout itemView = (LinearLayout)view;
+                itemView.setSelected(true);
                 MovieDetailFragment movieDetailFragment = new MovieDetailFragment();
                 Bundle bundles = new Bundle();
                 bundles.putParcelable(ApiConstants.MOVIE_DELTAIL_BUNDLE, popularMovieList.get(position));
                 movieDetailFragment.setArguments(bundles);
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, movieDetailFragment)
-                        .addToBackStack(null)
-                        .commit();
+                ((MainActivity)getActivity()).UpdateUI(movieDetailFragment);
+
             }
         });
         return popularMovieLayout;
@@ -111,7 +117,10 @@ public class PopularMoviesFragment extends Fragment {
     public void onStart() {
         super.onStart();
         if (popularMovieList.isEmpty()) {
-            if(isNetworkAvailable()){
+            if(fliter == ApiConstants.SORT_FAVORITE){
+                loadFravoriteMovies();
+            }
+            else if(AppUtility.isNetworkAvailable(getActivity())){
                 new FetchPopularMovieTask().execute(fliter, defaultPage);
             }
             else{
@@ -142,23 +151,57 @@ public class PopularMoviesFragment extends Fragment {
             case R.id.action_rating:
                 fliter = ApiConstants.SORT_RATING;
                 break;
+            case R.id.action_favorite:
+                fliter = ApiConstants.SORT_FAVORITE;
+                break;
         }
         popularMovieList.clear();
-        if(isNetworkAvailable()){
-            new FetchPopularMovieTask().execute(fliter, defaultPage);
+        ((MainActivity)getActivity()).UpdateUI(null);
+        if(fliter != ApiConstants.SORT_FAVORITE){
+            if(AppUtility.isNetworkAvailable(getActivity())){
+                new FetchPopularMovieTask().execute(fliter, defaultPage);
+            }
+            else{
+                popularMoviesGridView.setEmptyView(emptyListMessage);
+            }
+        }else{
+            loadFravoriteMovies();
         }
-        else{
-            popularMoviesGridView.setEmptyView(emptyListMessage);
-        }
+
         popularMoviesAdapter.notifyDataSetChanged();
 
         return super.onOptionsItemSelected(item);
     }
 
+    private void loadFravoriteMovies(){
+        try{
+            Cursor cursor =  getActivity().getContentResolver().query(FlavoriteMoviesContract.FlavoriteMoviesEntry.CONTENT_URI, null, null, null, null);
+            if(cursor.getCount() > 0 ){
+                popularMovieList.clear();
+
+                while (cursor.moveToNext()) {
+                    PopularMovieModel item = new PopularMovieModel();
+                    item.id = Long.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(FlavoriteMoviesContract.FlavoriteMoviesEntry.COLUMN_MOVIE_ID)));
+                    item.title = cursor.getString(cursor.getColumnIndexOrThrow(FlavoriteMoviesContract.FlavoriteMoviesEntry.COLUMN_TITLE));
+                    item.poster_path = cursor.getString(cursor.getColumnIndexOrThrow(FlavoriteMoviesContract.FlavoriteMoviesEntry.COLUMN_POSTER));
+                    item.backdrop_path = cursor.getString(cursor.getColumnIndexOrThrow(FlavoriteMoviesContract.FlavoriteMoviesEntry.COLUMN_BACKDROP_POSTER));
+                    item.release_date = cursor.getString(cursor.getColumnIndexOrThrow(FlavoriteMoviesContract.FlavoriteMoviesEntry.COLUMN_RELEASE_DATE));
+                    item.overview = cursor.getString(cursor.getColumnIndexOrThrow(FlavoriteMoviesContract.FlavoriteMoviesEntry.COLUMN_OVERVIEW));
+                    item.vote_average = cursor.getString(cursor.getColumnIndexOrThrow(FlavoriteMoviesContract.FlavoriteMoviesEntry.COLUMN_VOTE));
+                    popularMovieList.add(item);
+                }
+            }else{
+                popularMoviesGridView.setEmptyView(emptyListMessage);
+            }
+            popularMoviesAdapter.notifyDataSetChanged();
+        }catch (Exception e){
+            Log.d("",e.getMessage());
+        }
+
+    }
+
     private String getData(String url) throws IOException {
         OkHttpClient client = new OkHttpClient();
-
-
         Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -167,12 +210,6 @@ public class PopularMoviesFragment extends Fragment {
         return response.body().string();
     }
 
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
 
     private class FetchPopularMovieTask extends AsyncTask<String, Integer, String> {
 

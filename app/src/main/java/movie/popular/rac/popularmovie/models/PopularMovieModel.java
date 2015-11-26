@@ -4,12 +4,14 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by User on 6/26/2015.
  */
 
 public class PopularMovieModel implements Parcelable {
+    public long id;
     public String title;
     public String poster_path;
     public String backdrop_path;
@@ -17,8 +19,15 @@ public class PopularMovieModel implements Parcelable {
     public String release_date;
     public String overview;
     public String vote_average;
+    public ArrayList<TrailerModel> trailers;
+
+    public PopularMovieModel(){
+
+    }
+
 
     protected PopularMovieModel(Parcel in) {
+        id = in.readLong();
         title = in.readString();
         poster_path = in.readString();
         backdrop_path = in.readString();
@@ -44,19 +53,21 @@ public class PopularMovieModel implements Parcelable {
         return release_date.split("-")[0];
     }
 
+
     @Override
     public int describeContents() {
         return 0;
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(title);
-        dest.writeString(poster_path);
-        dest.writeString(backdrop_path);
-        dest.writeString(original_title);
-        dest.writeString(release_date);
-        dest.writeString(overview);
-        dest.writeString(vote_average);
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeLong(id);
+        parcel.writeString(title);
+        parcel.writeString(poster_path);
+        parcel.writeString(backdrop_path);
+        parcel.writeString(original_title);
+        parcel.writeString(release_date);
+        parcel.writeString(overview);
+        parcel.writeString(vote_average);
     }
 }

@@ -7,15 +7,27 @@
 
         <RelativeLayout style="@style/default_linear_loyoutV">
 
-            <ImageView
-                android:id="@+id/bigposter"
-                style="@style/detial_bigposter" />
+            <android.support.v4.view.ViewPager
+                android:id="@+id/pager"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/banner"></android.support.v4.view.ViewPager>
+
+            <RelativeLayout
+                android:id="@+id/viewPagerIndicator"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_below="@+id/pager"
+                android:layout_marginTop="-30dp">
+
+                <LinearLayout
+                    android:id="@+id/viewPagerCountDots"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal"></LinearLayout>
+            </RelativeLayout>
 
             <LinearLayout style="@style/movie_detail">
-
-                <ImageView
-                    android:id="@+id/poster"
-                    style="@style/detailview_poster" />
 
                 <LinearLayout style="@style/detailview_movie_detail">
 
@@ -32,15 +44,45 @@
                         style="@style/detailview_movie_text" />
                 </LinearLayout>
             </LinearLayout>
+
+            <ImageView
+                android:id="@+id/poster"
+                style="@style/detailview_poster"
+                android:layout_below="@+id/pager"
+                android:layout_marginLeft="@dimen/padding"
+                android:elevation="8dp" />
+
         </RelativeLayout>
 
-        <LinearLayout style="@style/detailview_movie_description_holder">
+        <TextView
+            style="@style/detailview_movie_segment_head"
+            android:text="Description" />
 
-            <View style="@style/Divider" />
+        <LinearLayout style="@style/detailview_movie_description_holder">
 
             <TextView
                 android:id="@+id/description"
                 style="@style/detailview_description" />
+
+        </LinearLayout>
+
+        <TextView
+            style="@style/detailview_movie_segment_head"
+            android:text="Reviews" />
+
+        <LinearLayout style="@style/detailview_movie_description_holder">
+
+            <ListView
+                android:id="@+id/reviews_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"></ListView>
+            <TextView
+                android:id="@+id/no_review"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:text="No Reviews Found" />
+
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

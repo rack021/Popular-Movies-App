@@ -2,10 +2,13 @@
     <string name='app_name'>Popular Movie</string>
     <string name='action_popularty'>by Popularty</string>
     <string name='action_rating'>by Rating</string>
+    <string name='action_favorite'>Favorite Collection</string>
     <string name='porter_base_url'>http://image.tmdb.org/t/p/w342/</string>
     <string name='banner_base_url'>http://image.tmdb.org/t/p/w342/</string>
-    <string name='youtube_thumb_url'>http://img.youtube.com/vi/%s/default.jpg</string>
+    <string name='youtube_thumb_url'>http://img.youtube.com/vi/%s/hqdefault.jpg</string>
     <string name='rating'>%s/10</string>
     <string name="MOVIE_KEY">movie_key</string>
+    <string name="MOVIE_DETAIL_KEY">movie_detail_key</string>
     <string name="FLITER">filter_key</string>
+    <string name="content_authority">movie.popular.rac.popularmovie.data</string>
 </resources>

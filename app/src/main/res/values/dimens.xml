@@ -2,7 +2,7 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="elevation">3dp</dimen>
+    <dimen name="elevation">4dp</dimen>
     <dimen name="grid_item_height">195dp</dimen>
     <dimen name="grid_movie_name_margin">8dp</dimen>
     <dimen name="grid_movie_name_fontsize">12sp</dimen>

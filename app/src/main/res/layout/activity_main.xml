@@ -1,8 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/verticle_activity"
-    android:fitsSystemWindows="true">
-    <FrameLayout
-        android:id="@+id/container"
-        style="@style/default_linear_loyoutV" />
-</LinearLayout>
+    android:id="@+id/container"
+    style="@style/default_linear_loyoutV" />

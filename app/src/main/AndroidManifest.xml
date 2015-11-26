@@ -19,6 +19,16 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
         </activity>
+        <provider
+            android:authorities="@string/content_authority"
+            android:name=".data.FlavoriteMovieProvider"
+            android:exported="false"
+            android:syncable="true"/>
     </application>
 </manifest>

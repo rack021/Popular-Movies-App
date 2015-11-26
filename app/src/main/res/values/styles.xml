@@ -13,22 +13,32 @@
 
     </style>
 
+
+
     <style name="verticle_activity">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:orientation">vertical</item>
     </style>
 
+    <style name="horozontal_activity">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
     <style name="Divider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/divider_height</item>
         <item name="android:background">?android:attr/listDivider</item>
+        <item name="android:layout_marginBottom">@dimen/grid_view_spacing</item>
     </style>
 
     <style name="default_linear_loyoutV">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:orientation">vertical</item>
+        <item name="android:elevation">@dimen/elevation</item>
+        <item name="android:background">@android:color/white</item>
     </style>
 
     <style name="grid_item_layout">
@@ -80,17 +90,26 @@
         <item name="android:src">@drawable/poster_placeholder</item>
     </style>
 
+    <style name="trailer_play_btn">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/banner</item>
+        <item name="android:adjustViewBounds">false</item>
+        <item name="android:cropToPadding">false</item>
+        <item name="android:scaleType">center</item>
+        <item name="android:src">@drawable/ic_playbutton</item>
+    </style>
+
     <style name="movie_detail">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_below">@+id/bigposter</item>
-        <item name="android:layout_marginTop">@dimen/movie_detail_holder_margin</item>
-        <item name="android:orientation">horizontal</item>
-        <item name="android:padding">@dimen/padding</item>
+        <item name="android:layout_below">@+id/pager</item>
+        <item name="android:paddingBottom">@dimen/padding</item>
+        <item name="android:paddingTop">@dimen/padding</item>
     </style>
 
     <style name="detailview_poster">
         <item name="android:layout_width">@dimen/detailview_poster_width</item>
+        <item name="android:layout_marginTop">@dimen/movie_detail_holder_margin</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:adjustViewBounds">true</item>
         <item name="android:clipChildren">false</item>
@@ -102,7 +121,8 @@
     <style name="detailview_movie_detail">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">@dimen/detailview_movie_detail_width</item>
+        <item name="android:minHeight">108dp</item>
+        <item name="android:layout_marginLeft">118dp</item>
         <item name="android:orientation">vertical</item>
     </style>
 
@@ -119,14 +139,19 @@
         <item name="android:color">@color/primary_font_color</item>
     </style>
 
+    <style name="detailview_movie_segment_head" parent="detailview_movie_text">
+        <item name="android:layout_margin">@dimen/padding</item>
+        <item name="android:textSize">@dimen/detailview_movie_detail_text_name_size</item>
+        <item name="android:color">@color/primary_font_color</item>
+    </style>
+
     <style name="detailview_movie_description_holder" parent="default_linear_loyoutV">
-        <item name="android:paddingLeft">@dimen/padding</item>
-        <item name="android:paddingRight">@dimen/padding</item>
+        <item name="android:padding">@dimen/padding</item>
     </style>
 
     <style name="detailview_description" parent="detailview_movie_text">
-        <item name="android:layout_marginLeft">@dimen/padding</item>
-        <item name="android:padding">@dimen/grid_view_spacing</item>
+        <item name="android:layout_marginLeft">0dp</item>
+
     </style>
 
     <style name="no_internet_image">
@@ -141,6 +166,4 @@
         <item name="android:src">@drawable/no_internet_img</item>
         <item name="android:background">#FFF7F7F7</item>
     </style>
-
-
 </resources>
