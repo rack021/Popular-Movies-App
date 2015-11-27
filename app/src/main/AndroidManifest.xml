@@ -10,6 +10,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:name=".PopularMovieApp"
         android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
@@ -27,7 +28,7 @@
         </activity>
         <provider
             android:authorities="@string/content_authority"
-            android:name=".data.FlavoriteMovieProvider"
+            android:name=".data.FavoriteMovieProvider"
             android:exported="false"
             android:syncable="true"/>
     </application>

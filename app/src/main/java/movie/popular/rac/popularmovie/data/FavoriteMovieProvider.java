@@ -12,9 +12,9 @@ import android.support.annotation.Nullable;
 /**
  * Created by rac on 11/6/15.
  */
-public class FlavoriteMovieProvider extends ContentProvider {
+public class FavoriteMovieProvider extends ContentProvider {
 
-    private static final String LOG_TAG = FlavoriteMovieProvider.class.getSimpleName();
+    private static final String LOG_TAG = FavoriteMovieProvider.class.getSimpleName();
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private PopularMovieDBHelper mOpenHelper;
     private static final int FLAVOR = 100;
@@ -25,11 +25,11 @@ public class FlavoriteMovieProvider extends ContentProvider {
         // Build a UriMatcher by adding a specific code to return based on a match
         // It's common to use NO_MATCH as the code for this case.
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
-        final String authority = FlavoriteMoviesContract.CONTENT_AUTHORITY;
+        final String authority = FavoriteMoviesContract.CONTENT_AUTHORITY;
 
         // add a code for each type of URI you want
-        matcher.addURI(authority, FlavoriteMoviesContract.FlavoriteMoviesEntry.TABLE_FAVORITE_MOVIE, FLAVOR);
-        matcher.addURI(authority, FlavoriteMoviesContract.FlavoriteMoviesEntry.TABLE_FAVORITE_MOVIE + "/#", FLAVOR_WITH_ID);
+        matcher.addURI(authority, FavoriteMoviesContract.FlavoriteMoviesEntry.TABLE_FAVORITE_MOVIE, FLAVOR);
+        matcher.addURI(authority, FavoriteMoviesContract.FlavoriteMoviesEntry.TABLE_FAVORITE_MOVIE + "/#", FLAVOR_WITH_ID);
 
         return matcher;
     }
@@ -49,7 +49,7 @@ public class FlavoriteMovieProvider extends ContentProvider {
             // All Flavors selected
             case FLAVOR:{
                 retCursor = mOpenHelper.getReadableDatabase().query(
-                        FlavoriteMoviesContract.FlavoriteMoviesEntry.TABLE_FAVORITE_MOVIE,
+                        FavoriteMoviesContract.FlavoriteMoviesEntry.TABLE_FAVORITE_MOVIE,
                         projection,
                         selection,
                         selectionArgs,
@@ -61,9 +61,9 @@ public class FlavoriteMovieProvider extends ContentProvider {
             // Individual flavor based on Id selected
             case FLAVOR_WITH_ID:{
                 retCursor = mOpenHelper.getReadableDatabase().query(
-                        FlavoriteMoviesContract.FlavoriteMoviesEntry.TABLE_FAVORITE_MOVIE,
+                        FavoriteMoviesContract.FlavoriteMoviesEntry.TABLE_FAVORITE_MOVIE,
                         projection,
-                        FlavoriteMoviesContract.FlavoriteMoviesEntry._ID + " = ?",
+                        FavoriteMoviesContract.FlavoriteMoviesEntry._ID + " = ?",
                         new String[] {String.valueOf(ContentUris.parseId(uri))},
                         null,
                         null,
@@ -84,10 +84,10 @@ public class FlavoriteMovieProvider extends ContentProvider {
 
         switch (match){
             case FLAVOR:{
-                return FlavoriteMoviesContract.FlavoriteMoviesEntry.CONTENT_DIR_TYPE;
+                return FavoriteMoviesContract.FlavoriteMoviesEntry.CONTENT_DIR_TYPE;
             }
             case FLAVOR_WITH_ID:{
-                return FlavoriteMoviesContract.FlavoriteMoviesEntry.CONTENT_ITEM_TYPE;
+                return FavoriteMoviesContract.FlavoriteMoviesEntry.CONTENT_ITEM_TYPE;
             }
             default:{
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -102,10 +102,10 @@ public class FlavoriteMovieProvider extends ContentProvider {
         Uri returnUri;
         switch (sUriMatcher.match(uri)) {
             case FLAVOR: {
-                long _id = db.insert(FlavoriteMoviesContract.FlavoriteMoviesEntry.TABLE_FAVORITE_MOVIE, null, contentValues);
+                long _id = db.insert(FavoriteMoviesContract.FlavoriteMoviesEntry.TABLE_FAVORITE_MOVIE, null, contentValues);
                 // insert unless it is already contained in the database
                 if (_id > 0) {
-                    returnUri = FlavoriteMoviesContract.FlavoriteMoviesEntry.buildFavoriteUri(_id);
+                    returnUri = FavoriteMoviesContract.FlavoriteMoviesEntry.buildFavoriteUri(_id);
                 } else {
                     throw new android.database.SQLException("Failed to insert row into: " + uri);
                 }
@@ -129,18 +129,18 @@ public class FlavoriteMovieProvider extends ContentProvider {
         switch(match){
             case FLAVOR:
                 numDeleted = db.delete(
-                        FlavoriteMoviesContract.FlavoriteMoviesEntry.TABLE_FAVORITE_MOVIE, selection, selectionArgs);
+                        FavoriteMoviesContract.FlavoriteMoviesEntry.TABLE_FAVORITE_MOVIE, selection, selectionArgs);
                 // reset _ID
                 db.execSQL("DELETE FROM SQLITE_SEQUENCE WHERE NAME = '" +
-                        FlavoriteMoviesContract.FlavoriteMoviesEntry.TABLE_FAVORITE_MOVIE + "'");
+                        FavoriteMoviesContract.FlavoriteMoviesEntry.TABLE_FAVORITE_MOVIE + "'");
                 break;
             case FLAVOR_WITH_ID:
-                numDeleted = db.delete(FlavoriteMoviesContract.FlavoriteMoviesEntry.TABLE_FAVORITE_MOVIE,
-                        FlavoriteMoviesContract.FlavoriteMoviesEntry._ID + " = ?",
+                numDeleted = db.delete(FavoriteMoviesContract.FlavoriteMoviesEntry.TABLE_FAVORITE_MOVIE,
+                        FavoriteMoviesContract.FlavoriteMoviesEntry._ID + " = ?",
                         new String[]{String.valueOf(ContentUris.parseId(uri))});
                 // reset _ID
                 db.execSQL("DELETE FROM SQLITE_SEQUENCE WHERE NAME = '" +
-                        FlavoriteMoviesContract.FlavoriteMoviesEntry.TABLE_FAVORITE_MOVIE+ "'");
+                        FavoriteMoviesContract.FlavoriteMoviesEntry.TABLE_FAVORITE_MOVIE+ "'");
 
                 break;
             default:

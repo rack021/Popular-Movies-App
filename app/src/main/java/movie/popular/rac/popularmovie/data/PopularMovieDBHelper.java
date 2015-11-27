@@ -21,15 +21,15 @@ public class PopularMovieDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         final String SQL_CREATE_MOVIE_TABLE = "CREATE TABLE " +
-                FlavoriteMoviesContract.FlavoriteMoviesEntry.TABLE_FAVORITE_MOVIE + "(" + FlavoriteMoviesContract.FlavoriteMoviesEntry._ID +
+                FavoriteMoviesContract.FlavoriteMoviesEntry.TABLE_FAVORITE_MOVIE + "(" + FavoriteMoviesContract.FlavoriteMoviesEntry._ID +
                 " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                FlavoriteMoviesContract.FlavoriteMoviesEntry.COLUMN_MOVIE_ID + " INTEGER NOT NULL, " +
-                FlavoriteMoviesContract.FlavoriteMoviesEntry.COLUMN_TITLE + " TEXT NOT NULL, " +
-                FlavoriteMoviesContract.FlavoriteMoviesEntry.COLUMN_OVERVIEW + " TEXT NOT NULL, " +
-                FlavoriteMoviesContract.FlavoriteMoviesEntry.COLUMN_RELEASE_DATE + " TEXT NOT NULL, " +
-                FlavoriteMoviesContract.FlavoriteMoviesEntry.COLUMN_POSTER + " TEXT NOT NULL, " +
-                FlavoriteMoviesContract.FlavoriteMoviesEntry.COLUMN_BACKDROP_POSTER + " TEXT NOT NULL, " +
-                FlavoriteMoviesContract.FlavoriteMoviesEntry.COLUMN_VOTE +
+                FavoriteMoviesContract.FlavoriteMoviesEntry.COLUMN_MOVIE_ID + " INTEGER NOT NULL, " +
+                FavoriteMoviesContract.FlavoriteMoviesEntry.COLUMN_TITLE + " TEXT NOT NULL, " +
+                FavoriteMoviesContract.FlavoriteMoviesEntry.COLUMN_OVERVIEW + " TEXT NOT NULL, " +
+                FavoriteMoviesContract.FlavoriteMoviesEntry.COLUMN_RELEASE_DATE + " TEXT NOT NULL, " +
+                FavoriteMoviesContract.FlavoriteMoviesEntry.COLUMN_POSTER + " TEXT NOT NULL, " +
+                FavoriteMoviesContract.FlavoriteMoviesEntry.COLUMN_BACKDROP_POSTER + " TEXT NOT NULL, " +
+                FavoriteMoviesContract.FlavoriteMoviesEntry.COLUMN_VOTE +
                 " TEXT NOT NULL);";
 
         db.execSQL(SQL_CREATE_MOVIE_TABLE);
@@ -40,9 +40,9 @@ public class PopularMovieDBHelper extends SQLiteOpenHelper {
         Log.w(LOG_TAG, "Upgrading database from version " + oldVersion + " to " +
                 newVersion + ". OLD DATA WILL BE DESTROYED");
         // Drop the table
-        db.execSQL("DROP TABLE IF EXISTS " + FlavoriteMoviesContract.FlavoriteMoviesEntry.TABLE_FAVORITE_MOVIE);
+        db.execSQL("DROP TABLE IF EXISTS " + FavoriteMoviesContract.FlavoriteMoviesEntry.TABLE_FAVORITE_MOVIE);
         db.execSQL("DELETE FROM SQLITE_SEQUENCE WHERE NAME = '" +
-                FlavoriteMoviesContract.FlavoriteMoviesEntry.TABLE_FAVORITE_MOVIE + "'");
+                FavoriteMoviesContract.FlavoriteMoviesEntry.TABLE_FAVORITE_MOVIE + "'");
 
         // re-create database
         onCreate(db);

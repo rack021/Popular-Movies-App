@@ -9,7 +9,7 @@ public class ApiConstants {
     public static final String EMPTY_STRING = "";
     public static final String FLITER_KEY = "fliter_key";
     public static final String BASE_URL = "http://api.themoviedb.org";
-    public static final String API_KEY = "INSERT YOUR KEY HERE";
+    public static final String API_KEY = "INSERT YOU API KEY HERE";
     public static final String MOVIE_API = "/3/discover/movie?sort_by=%s&page=%s&api_key=%s";
     public static final String TRAILER_API = "/3/movie/%s/videos?api_key=%s";
     public static final String REVIEW_API = "/3/movie/%s/reviews?page=%s&api_key=%s";

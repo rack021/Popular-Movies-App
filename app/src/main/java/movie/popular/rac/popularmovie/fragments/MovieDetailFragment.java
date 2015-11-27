@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
@@ -22,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -30,6 +30,7 @@ import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -38,7 +39,7 @@ import movie.popular.rac.popularmovie.MainActivity;
 import movie.popular.rac.popularmovie.R;
 import movie.popular.rac.popularmovie.adapters.MovieReviewAdapter;
 import movie.popular.rac.popularmovie.adapters.TrailerPageAdapter;
-import movie.popular.rac.popularmovie.data.FlavoriteMoviesContract;
+import movie.popular.rac.popularmovie.data.FavoriteMoviesContract;
 import movie.popular.rac.popularmovie.models.PopularMovieModel;
 import movie.popular.rac.popularmovie.models.ReviewModel;
 import movie.popular.rac.popularmovie.models.TrailerModel;
@@ -47,11 +48,13 @@ import movie.popular.rac.popularmovie.network.HttpClient;
 import movie.popular.rac.popularmovie.utilities.AppUtility;
 
 public class MovieDetailFragment extends Fragment {
+    private static final String NO_TRAILER_TOSHARE = "No Trailer available to share";
     Gson gson;
     PopularMovieModel popularMovieModel;
     ImageView trailer_btn;
     TrailerPageAdapter mTrailerPageAdapter;
     ViewPager mViewPager;
+    ImageView banner;
     int dotsCount;
     LinearLayout dotsLayout;
     TextView[] dots;
@@ -63,6 +66,7 @@ public class MovieDetailFragment extends Fragment {
     TextView noReview;
     FetchMovieTrialers movieTrialersAsync;
     FetchMovieReviewTask movieReviewTask;
+    DecimalFormat decimalFormat=new DecimalFormat("#.#");
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -124,7 +128,7 @@ public class MovieDetailFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
         flavorite = menu.findItem(R.id.flavorite);
         unflavorite = menu.findItem(R.id.unflavorite);
-        Cursor cursor = getActivity().getContentResolver().query(FlavoriteMoviesContract.FlavoriteMoviesEntry.CONTENT_URI, null, "id=?", new String[]{String.valueOf(popularMovieModel.id)}, null);
+        Cursor cursor = getActivity().getContentResolver().query(FavoriteMoviesContract.FlavoriteMoviesEntry.CONTENT_URI, null, "id=?", new String[]{String.valueOf(popularMovieModel.id)}, null);
         if(cursor.getCount() > 0){
             unflavorite.setVisible(false);
         }else{
@@ -149,11 +153,16 @@ public class MovieDetailFragment extends Fragment {
                 unflavorite.setVisible(true);flavorite.setVisible(false);
                 return true;
             case R.id.share:
-                Intent i = new Intent(Intent.ACTION_SEND);
-                i.setType("text/plain");
-                i.putExtra(Intent.EXTRA_SUBJECT, popularMovieModel.title);
-                i.putExtra(Intent.EXTRA_TEXT, Uri.parse("http://www.youtube.com/watch?v=" + popularMovieModel.trailers.get(0).key).toString());
-                startActivity(Intent.createChooser(i, "Share URL"));
+                if(popularMovieModel.trailers.size() > 0 ) {
+                    Intent i = new Intent(Intent.ACTION_SEND);
+                    i.setType("text/plain");
+                    i.putExtra(Intent.EXTRA_SUBJECT, popularMovieModel.title);
+                    i.putExtra(Intent.EXTRA_TEXT, Uri.parse("http://www.youtube.com/watch?v=" + popularMovieModel.trailers.get(0).key).toString());
+                    startActivity(Intent.createChooser(i, "Share URL"));
+                } else {
+                    Toast.makeText(getActivity().getApplicationContext(),NO_TRAILER_TOSHARE, Toast.LENGTH_SHORT).show();
+                }
+
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -176,12 +185,16 @@ public class MovieDetailFragment extends Fragment {
 
         reviewListView = (ListView)movieDetailLayout.findViewById(R.id.reviews_list);
         reviewListView.setAdapter(movieReviewAdapter);
-
+        banner = (ImageView) movieDetailLayout.findViewById(R.id.bigposter);
         ImageView poster = (ImageView) movieDetailLayout.findViewById(R.id.poster);
         TextView movie_name = (TextView) movieDetailLayout.findViewById(R.id.moviename);
         TextView year = (TextView) movieDetailLayout.findViewById(R.id.year);
         TextView description = (TextView) movieDetailLayout.findViewById(R.id.description);
         TextView rating = (TextView) movieDetailLayout.findViewById(R.id.rating);
+        Picasso.with(getActivity().getApplicationContext()).load(getActivity().getString(R.string.banner_base_url) + popularMovieModel.backdrop_path)
+                .placeholder(R.drawable.poster_placeholder)
+                .error(R.drawable.poster_placeholder)
+                .into(banner);
         Picasso.with(getActivity().getApplicationContext()).load(getActivity().getString(R.string.porter_base_url) + popularMovieModel.poster_path)
                 .placeholder(R.drawable.poster_placeholder)
                 .error(R.drawable.poster_placeholder)
@@ -189,7 +202,7 @@ public class MovieDetailFragment extends Fragment {
         movie_name.setText(popularMovieModel.original_title);
         year.setText(popularMovieModel.getYear());
         description.setText(popularMovieModel.overview);
-        rating.setText(String.format(Locale.ENGLISH, getActivity().getString(R.string.rating), popularMovieModel.vote_average));
+        rating.setText(String.format(Locale.ENGLISH, getActivity().getString(R.string.rating), decimalFormat.format(Double.valueOf(popularMovieModel.vote_average))));
         return movieDetailLayout;
     }
 
@@ -204,6 +217,14 @@ public class MovieDetailFragment extends Fragment {
 
 
     private void setUiPageViewController() {
+        if(popularMovieModel.trailers.size() >0){
+            banner.setVisibility(View.GONE);
+            mViewPager.setVisibility(View.VISIBLE);
+        }else {
+            banner.setVisibility(View.VISIBLE);
+            mViewPager.setVisibility(View.INVISIBLE);
+        }
+
         if(dotsCount == 0) {
             dotsCount = mTrailerPageAdapter.getCount();
             dots = new TextView[dotsCount];
@@ -267,33 +288,32 @@ public class MovieDetailFragment extends Fragment {
                 JsonObject o = new JsonParser().parse(s).getAsJsonObject();
                 List<TrailerModel> popularMovieList_temp = gson.fromJson(o.get("results"), new TypeToken<List<TrailerModel>>() {
                 }.getType());
-                if(popularMovieList_temp != null){
+                if(popularMovieList_temp != null && popularMovieList_temp.size() >0){
                     popularMovieModel.trailers.addAll(popularMovieList_temp);
                     mTrailerPageAdapter.notifyDataSetChanged();
                 }
 
                 setUiPageViewController();
-                Log.d("","");
-            }else{
-                //popularMoviesGridView.setEmptyView(emptyListMessage);
+                Log.d("", "");
             }
+
         }
     }
 
     public void markFlavorite(){
-        ContentValues flavoriteValue = new ContentValues();
-        flavoriteValue.put(FlavoriteMoviesContract.FlavoriteMoviesEntry.COLUMN_MOVIE_ID, popularMovieModel.id);
-        flavoriteValue.put(FlavoriteMoviesContract.FlavoriteMoviesEntry.COLUMN_TITLE, popularMovieModel.original_title);
-        flavoriteValue.put(FlavoriteMoviesContract.FlavoriteMoviesEntry.COLUMN_OVERVIEW, popularMovieModel.overview);
-        flavoriteValue.put(FlavoriteMoviesContract.FlavoriteMoviesEntry.COLUMN_RELEASE_DATE, popularMovieModel.release_date);
-        flavoriteValue.put(FlavoriteMoviesContract.FlavoriteMoviesEntry.COLUMN_POSTER, popularMovieModel.poster_path);
-        flavoriteValue.put(FlavoriteMoviesContract.FlavoriteMoviesEntry.COLUMN_BACKDROP_POSTER, popularMovieModel.backdrop_path);
-        flavoriteValue.put(FlavoriteMoviesContract.FlavoriteMoviesEntry.COLUMN_VOTE, popularMovieModel.vote_average);
+        ContentValues favoriteValue = new ContentValues();
+        favoriteValue.put(FavoriteMoviesContract.FlavoriteMoviesEntry.COLUMN_MOVIE_ID, popularMovieModel.id);
+        favoriteValue.put(FavoriteMoviesContract.FlavoriteMoviesEntry.COLUMN_TITLE, popularMovieModel.original_title);
+        favoriteValue.put(FavoriteMoviesContract.FlavoriteMoviesEntry.COLUMN_OVERVIEW, popularMovieModel.overview);
+        favoriteValue.put(FavoriteMoviesContract.FlavoriteMoviesEntry.COLUMN_RELEASE_DATE, popularMovieModel.release_date);
+        favoriteValue.put(FavoriteMoviesContract.FlavoriteMoviesEntry.COLUMN_POSTER, popularMovieModel.poster_path);
+        favoriteValue.put(FavoriteMoviesContract.FlavoriteMoviesEntry.COLUMN_BACKDROP_POSTER, popularMovieModel.backdrop_path + "");
+        favoriteValue.put(FavoriteMoviesContract.FlavoriteMoviesEntry.COLUMN_VOTE, popularMovieModel.vote_average);
         // bulkInsert our ContentValues array
-        getActivity().getContentResolver().insert(FlavoriteMoviesContract.FlavoriteMoviesEntry.CONTENT_URI, flavoriteValue);
+        getActivity().getContentResolver().insert(FavoriteMoviesContract.FlavoriteMoviesEntry.CONTENT_URI, favoriteValue);
     }
     public void unMarkFlavorite(){
-        getActivity().getContentResolver().delete(FlavoriteMoviesContract.FlavoriteMoviesEntry.CONTENT_URI, "id=?", new String[]{String.valueOf(popularMovieModel.id)});
+        getActivity().getContentResolver().delete(FavoriteMoviesContract.FlavoriteMoviesEntry.CONTENT_URI, "id=?", new String[]{String.valueOf(popularMovieModel.id)});
     }
 
     private class FetchMovieReviewTask extends AsyncTask<String, Integer, String> {
@@ -330,6 +350,7 @@ public class MovieDetailFragment extends Fragment {
                 noReview.setVisibility(View.VISIBLE);
                 reviewListView.setEmptyView(noReview);
             }
+
         }
     }
 }

@@ -3,7 +3,6 @@ package movie.popular.rac.popularmovie.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -50,7 +49,7 @@ public class PopularMovieModel implements Parcelable {
     };
 
     public String getYear(){
-        return release_date.split("-")[0];
+        return (release_date == null)?"":release_date.split("-")[0];
     }
 
 
